@@ -51,7 +51,7 @@ def read_config(filename: Path) -> list[str]:
         raise InvalidCredentials("config file is not valid: not all credentials"
                 " are found")
 
-    if not all(*result):
+    if not all(result):
         raise InvalidCredentials("config file is not valid: some credentials are empty")
 
     return result
