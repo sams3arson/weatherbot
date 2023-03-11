@@ -26,7 +26,7 @@ def get(filename: Path | None = None) -> Credentials:
         if filename and path.exists(filename):
             api_id, api_hash, bot_token, weather_api = read_config(filename)
         else:
-            raise InvalidCredentials("env variables are not set, and config"\
+            raise InvalidCredentials("env variables are not set, and config"
                     " file doesn't exist")
     if api_id.isdigit():
         api_id = int(api_id)
@@ -41,15 +41,18 @@ def read_config(filename: Path) -> list[str]:
     parser.read(filename)
 
     if CONFIG_BOTSECTION not in parser:
-        raise InvalidCredentials(f"config file is not valid: {CONFIG_BOTSECTION}"\
+        raise InvalidCredentials(f"config file is not valid: {CONFIG_BOTSECTION}"
                 "section not found")
 
     try:
         result = [str(parser[CONFIG_BOTSECTION][var_name.lower()]) for var_name
                   in VARIABLES]
     except KeyError:
-        raise InvalidCredentials("config file is not valid: not all credentials"\
+        raise InvalidCredentials("config file is not valid: not all credentials"
                 " are found")
+
+    if not all(*result):
+        raise InvalidCredentials("config file is not valid: some credentials are empty")
 
     return result
 
